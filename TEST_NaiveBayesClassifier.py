@@ -20,26 +20,32 @@ with open ("pickles/count_features/test_features","rb") as f:
 with open ("pickles/test_scores","rb") as f:
     ratings=pickle.load(f)
 
-n = 10
+n = 100
 m = 1000
-performance_threshold = 0.64
-sum_performance = 0
+performance_threshold = 0.73
+sum_performance_1, sum_performance_2 = 0, 0
 
 naiveTester = naive.NaiveBayesClassifier()
 naiveTester.train(reviews_count_format, ratings)
 for j in range(n):
-    count = 0
+    count_1, count_2 = 0, 0
     x = random.randint(1,100000)
     words_to_be_predicted = reviews_count_format.tocsr()[x:x+m]
     real_ratings = ratings[x:x+m]
-    diff = naiveTester.fit(words_to_be_predicted) - real_ratings
-    count = m - np.count_nonzero (diff)
-    percentage_performance = count/m
-    sum_performance += percentage_performance
+    diff_1 = naiveTester.fit_1(words_to_be_predicted) - real_ratings
+    #diff_2 = naiveTester.fit_2(words_to_be_predicted) - real_ratings
+    count_1 = m - np.count_nonzero (diff_1)
+    #count_2 = m - np.count_nonzero (diff_2)
+    percentage_performance_1 = count_1/m
+    #percentage_performance_2 = count_2/m
+    sum_performance_1 += percentage_performance_1
+    #sum_performance_2 += percentage_performance_2
     
-    #print("Predicted:     " + str(naiveTester.fit(words_to_be_predicted)))
+    #print("Predicted (fit_1 :" + str(naiveTester.fit_1(words_to_be_predicted)))
+    #print("Predicted (fit_2 :" + str(naiveTester.fit_2(words_to_be_predicted)))
     #print("Actual rating: " + str(real_ratings))
-average_performance = sum_performance / n
-#print(average_performance)
-assert (average_performance >= performance_threshold)
-
+    #print(naiveTester.fit_1(words_to_be_predicted))
+average_performance_1 = sum_performance_1 / n
+#average_performance_2 = sum_performance_2 / n
+print(average_performance_1)
+assert (average_performance_1 >= performance_threshold)

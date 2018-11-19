@@ -25,9 +25,9 @@ class NaiveBayesClassifier():
     def get_fractions(self):
         """assigns the fraction of all reviews belonging to each rating value"""
         count = np.bincount(self.scores)[1:]
-        fractions = count / np.sum(count)
+        self.fractions = count / np.sum(count)
         
-        return fractions
+        return self.fractions
         
     def convert_data(self):
         """creates a list in which each entry represents a sparse matrices 
@@ -45,14 +45,38 @@ class NaiveBayesClassifier():
         rating category. Includes Laplace Smoothing with low ɑ."""
         size = self.train_data.get_shape()[1]
         temp = self.rev_to_rating_sum
-        self.cond_prob = [(temp[i]+a)/(temp[i].sum()+1+size) for i in range(5)]
+        self.cond_prob = [spa.csr_matrix((temp[i]+a)/(temp[i].sum()+1+size))
+                        for i in range(5)]
+        # for use in the matrix operations of fit_1
+        self.log_cond_prob_trans = [(spa.csr_matrix(np.log((temp[i]+a)/
+                                (temp[i].sum()+1+size)))).transpose()
+                        for i in range(5)]
         
         return self.cond_prob
-                
-    def fit(self, x: spa.csr_matrix):
+    
+    def fit_1(self, x: spa.csr_matrix):
+        """returns a matrix with the predicted ratings. Applies logs to 
+        avoid underflow and to take into account that the probability of 
+        appearance of a word increases if the same word has already appeared
+        before. Uses only matrix operations."""
+        if self.is_trained == False:
+            return ("""The Classifier has not been trained. Please use 
+                    train(train_data: spa.csr_matrix, scores: np.ndarray, 
+                    Laplace_alpha) to train the Classifier.""")
+        else:
+            x.data = np.log(x.data + 1)
+            self.log_cond_prob_matrix = spa.hstack(self.log_cond_prob_trans)
+            log_freq = np.log(self.fractions)
+            pre_final_result = x.dot(self.log_cond_prob_matrix) + log_freq
+            final_prediction = (pre_final_result.argmax(axis=1) + 1).transpose()
+            x.data = np.exp(x.data) - 1
+            return final_prediction
+    
+    def fit_2(self, x: spa.csr_matrix):
         """returns a numpy.array with the predicted ratings. Applies logs to 
         avoid underflow and to take into account that the probability of 
-        appearance of a word increases if the same word has already appeared before."""
+        appearance of a word increases if the same word has already appeared before.
+        Has a lower time efficiency than fit_1"""
        
         if self.is_trained == False:
             return ("""The Classifier has not been trained. Please use 
@@ -62,13 +86,15 @@ class NaiveBayesClassifier():
             final_predict = np.empty(0, dtype = int)
             for row in x:
                 row_indices = spa.find(row)
-                predictions = [0]*5
+                self.predictions = [1]*5
                 for i in range(5):
                     for j in range(0,len(row_indices[0])):
-                        predictions[i] += self.fractions[i] * (
-                        ((self.cond_prob[i][row_indices[0][j],
-                        row_indices[1][j]])) ** np.log(1 + row_indices[2][j]))
-                smoothed_predictions = [np.log(predictions[i]) if (predictions[i] != 0) 
+                        self.predictions[i] *= (
+                        self.cond_prob[i][row_indices[0][j],
+                        row_indices[1][j]]) ** np.log(1 + row_indices[2][j])
+                    self.predictions[i] *= self.fractions[i]
+                smoothed_predictions = [np.log(self.predictions[i]) 
+                                    if (self.predictions[i] != 0) 
                                     else float("-inf") for i in range(5)]
                 final_predict = np.append(final_predict, 
                 smoothed_predictions.index(max(smoothed_predictions)) + 1)
