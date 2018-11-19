@@ -3,16 +3,14 @@
 """
 @author: tobiasbraun
 """
-############################ imports ##########################################
+############################### imports #######################################
 
 import pickle
 import random
 import CLASS_NaiveBayesClassifier as naive
 import numpy as np
 
-########################### testing ###########################################
-
-#random.seed(1)
+############################# loading data ####################################
 
 with open ("pickles/count_features/test_features","rb") as f:
     reviews_count_format=pickle.load(f)
@@ -20,10 +18,15 @@ with open ("pickles/count_features/test_features","rb") as f:
 with open ("pickles/test_scores","rb") as f:
     ratings=pickle.load(f)
 
+########################### choosing parameters ###############################
+
+#random.seed(1)
 n = 100
 m = 1000
 performance_threshold = 0.73
 sum_performance_1, sum_performance_2 = 0, 0
+
+############################### testing #######################################
 
 naiveTester = naive.NaiveBayesClassifier()
 naiveTester.train(reviews_count_format, ratings)
@@ -47,5 +50,6 @@ for j in range(n):
     #print(naiveTester.fit_1(words_to_be_predicted))
 average_performance_1 = sum_performance_1 / n
 #average_performance_2 = sum_performance_2 / n
+
 print(average_performance_1)
 assert (average_performance_1 >= performance_threshold)
