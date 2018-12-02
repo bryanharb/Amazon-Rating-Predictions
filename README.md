@@ -21,6 +21,7 @@ We used an OOP approach to the problem, following strict conventions to ensure e
 - TEST files: these files test the class implementations with the same name.
 
 ########## Classification models
+
 We focused our analysis on four different models: K-Neighbors, Naive Bayes, Logistic Regression and Support Vector Machines.
 We implemented KNN and Naive Bayes autonomously (CLASS_NaiveBayesClassifier, CLASS_KNNClassifier) and tried to implement Logistic 
 Regression (CLASS_LogisticRegression), but failed to do so due to problems with the implementation of Stochastic Gradient Descent (SGD).
