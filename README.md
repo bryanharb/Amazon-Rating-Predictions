@@ -2,13 +2,16 @@
 Machine learning models for text based labeling
 
 ########## Objective
+
 Training a model to predict the number of stars (from 1 to 5) on an Amazon review based on the text content of the review.
 
 ########## Data
+
 The data that we used to validate our models and train the optimal model is available at
 https://www.kaggle.com/snap/amazon-fine-food-reviews
 
 ########## File structure
+
 We used an OOP approach to the problem, following strict conventions to ensure encapsulation. There are 5 different types of code files:
 - CFG files: these files contain hardcoded values that are useful for other applications, such as paths or parameters used in other files.
 - CLASS files: these files define custom classes.
@@ -24,6 +27,7 @@ Regression (CLASS_LogisticRegression), but failed to do so due to problems with 
 We then fell back to sklearn's implementation of SGDClassifier for Logistic Regression and SVM using SGD.
 
 ########## Text representations
+
 We focused on Bag of Words (BoW) models for text representations, considering count, set and TFIDF representations. Due to the size of
 the reviews, we decided to focus only on the content of the summaries. Using summaries only, the size of the vocabulary is around
 30.000 words, which is still treatable using sparse matrices. We considered stemming and removing stop-words, but this was time consuming
@@ -32,6 +36,7 @@ These word representations are created through the CLASS_ReviewDataSet class and
 The whole data processing and creation of representation is handled by running MAIN_DataPipeline.
 
 ########## Validation results
+
 We performed 10-fold cross validation on 80% of the dataset for Naive Bayes, Logistic Regression and Support Vector Machines. We did NOT
 perform cross validation on K-Neighbors - this process proved to be extremely time consuming (as expected from the size of the data). Due 
 to low performance on the dataset (imbalanced classes, size, etc. all work against this classifier) we decided not to bring this forward.
@@ -69,6 +74,7 @@ and representations. Following this analysis, we decided to opt for a Naive Baye
 text features.
 
 ########## Test results
+
 We trained the Naive Bayes classifier on the entirety of the training set using count features and obtained an accuracy on the test
 set of 71.68%, which is in line with the average validation accuracy. We consider this result to be satisfactory, particularly
 considering the number of classes (5) and the unbalance in the dataset (5-star reviews are much more frequent than any other). This
