@@ -1,4 +1,7 @@
-############################ imports ##########################################
+"""
+@author: yuxingchen
+"""
+############################ imports #########################################
 import numpy as np
 from scipy.sparse import rand
 import CLASS_KNNClassifier as KNN
@@ -25,7 +28,7 @@ KNNTester.fit(train_features, train_scores)
 predicted_scores1 = KNNTester.predict(test_features)
 avg_performance1 = np.average(predicted_scores1 == test_scores)
 
-#######################KNeighborsClassifier from sklearn.neighbors########################
+##################KNeighborsClassifier from sklearn.neighbors###################
 neigh = KNeighborsClassifier(n_neighbors = k)
 neigh.fit(train_features, train_scores) 
 predicted_scores2 = KNNTester.predict(test_features)
