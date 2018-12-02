@@ -38,19 +38,31 @@ to low performance on the dataset (imbalanced classes, size, etc. all work again
 The result of the cross validation in terms of accuracy was the following (this may slightly vary rerunning MAIN_CrossValidation):
 
 NAIVE BAYES CLASSIFIER
+
 COUNT - AVG TRAIN ACC: 73.94% AVG VAL ACC: 71.44%
+
 SET - AVG TRAIN ACC: 73.91% AVG VAL ACC: 71.42%
+
 TFIDF - AVG TRAIN ACC: 71.17% AVG VAL ACC: 69.20%
 
+
 LOGISTIC REGRESSION CLASSIFIER
+
 COUNT - AVG TRAIN ACC: 70.22% AVG VAL ACC: 70.03%
+
 SET - AVG TRAIN ACC: 70.23% AVG VAL ACC: 70.03%
+
 TFIDF - AVG TRAIN ACC: 68.68% AVG VAL ACC: 68.61%
 
+
 SVM CLASSIFIER
+
 COUNT - AVG TRAIN ACC: 70.51% AVG VAL ACC: 70.13%
+
 SET - AVG TRAIN ACC: 70.46% AVG VAL ACC: 70.06%
+
 TFIDF - AVG TRAIN ACC: 69.28% AVG VAL ACC: 69.09%
+
 
 The results of our validation can be seen with more accuracy in the OUTPUT png files showing boxplots for the various classifiers
 and representations. Following this analysis, we decided to opt for a Naive Bayes classifier using the count representation for
