@@ -1,5 +1,7 @@
 # Amazon-Rating-Predictions
 Machine learning models for text based labeling
+Group name: __
+Section: 1
 
 ########## Objective
 
@@ -9,6 +11,7 @@ Training a model to predict the number of stars (from 1 to 5) on an Amazon revie
 
 The data that we used to validate our models and train the optimal model is available at
 https://www.kaggle.com/snap/amazon-fine-food-reviews
+The Reviews.csv file should be placed in data/raw_data.
 
 ########## File structure
 
@@ -81,3 +84,12 @@ set of 71.68%, which is in line with the average validation accuracy. We conside
 considering the number of classes (5) and the unbalance in the dataset (5-star reviews are much more frequent than any other). This
 result can be reproduced by running the MAIN_OptimalModelTest file, which also stores the optimal model in a pickle in the 
 optimal_classifier directory within the pickles folder.
+
+########## Run instructions
+
+To run the code in its entirety, you need to run, in the following order:
+
+MAIN_Datapipeline: cleans and splits the data, creates pickles for set, count, tfidf representations that are used during the validation phase.
+MAIN_CrossValidation: performs cross validation on the models listed above and prints their performances.
+MAIN_OptimalModelTest: trains the Naive Bayes classifier on the entire training set, evaluates its accuracy on the test set and pickles the optimal classifier for reuse.
+
